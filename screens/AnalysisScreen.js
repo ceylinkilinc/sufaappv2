@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { calculateDecisionScores } from '../utils/decisionAlgorithm';
 import PrimaryButton from '../components/PrimaryButton';
 import { Feather } from '@expo/vector-icons';
+import { saveAnalysisReport } from '../utils/firebaseUtils';
+import { useAnalysis } from '../context/AnalysisContext'; // 💥 EKLENDİ
 
 export default function AnalysisScreen({ route, navigation }) {
   const {
@@ -18,6 +20,7 @@ export default function AnalysisScreen({ route, navigation }) {
   } = route.params;
 
   const [result, setResult] = useState(null);
+  const { addEntry } = useAnalysis(); // 💥 CONTEXT'TEN ALINDI
 
   useEffect(() => {
     const scores = calculateDecisionScores({
@@ -27,7 +30,34 @@ export default function AnalysisScreen({ route, navigation }) {
       price,
       infrastructure
     });
+
     setResult(scores);
+
+    const entryData = {
+      sentimental,
+      usage,
+      material,
+      price,
+      infrastructure,
+      title,
+      image,
+      scores,
+      type: scores.recommendation
+    };
+
+    // 1. Firebase'e kayıt
+    saveAnalysisReport(entryData).catch((err) =>
+      console.error("Firebase save error:", err)
+    );
+
+    // 2. Dashboard için context'e ekle
+    addEntry({
+      title,
+      type: scores.recommendation,
+      image,
+      date: new Date().toLocaleDateString()
+    });
+
   }, []);
 
   const handleImpactPress = (type) => {
@@ -144,7 +174,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   backButton: {
-    paddingVertical: 18, // bir tık büyük
+    paddingVertical: 18,
     paddingHorizontal: 32
   },
   backButtonText: {

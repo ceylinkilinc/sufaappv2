@@ -1,28 +1,29 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-export const AnalysisContext = createContext();
+const AnalysisContext = createContext();
 
 export const AnalysisProvider = ({ children }) => {
   const [entries, setEntries] = useState([]);
 
-  const addAnalysis = (entry) => {
+  const addEntry = (entry) => {
     setEntries((prev) => [
       ...prev,
       {
         id: Date.now(),
         title: entry.title,
         type: entry.type,
-        date: new Date().toLocaleDateString(),
-        image: entry.image || null,
-      },
+        date: entry.date || new Date().toLocaleDateString(),
+        image: entry.image || null
+      }
     ]);
   };
 
   return (
-    <AnalysisContext.Provider value={{ entries, addAnalysis }}>
+    <AnalysisContext.Provider value={{ entries, addEntry }}>
       {children}
     </AnalysisContext.Provider>
   );
 };
 
+// Bu fonksiyonu import edip context'e erişiyoruz
 export const useAnalysis = () => useContext(AnalysisContext);
