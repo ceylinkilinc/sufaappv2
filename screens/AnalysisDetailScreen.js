@@ -4,55 +4,34 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
 export default function AnalysisDetailScreen({ route, navigation }) {
-  const { title, type, date, image } = route.params || {};
+  const { title, type, date, image, fromAnalysis } = route.params || {};
   const [impactItems, setImpactItems] = useState([]);
 
   useEffect(() => {
+    const getRandomInt = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const getRandomItem = (arr) =>
+      arr[Math.floor(Math.random() * arr.length)];
+
     const generateImpacts = () => {
       if (type === 'recycle') {
         return [
-          {
-            label: 'Water Saved',
-            value: `${getRandomInt(70, 150)} liters`
-          },
-          {
-            label: 'Trees Saved',
-            value: `${(Math.random() * 0.4 + 0.1).toFixed(2)} trees`
-          },
-          {
-            label: 'Textiles Diverted',
-            value: `${(Math.random() * 1.5 + 0.5).toFixed(1)} kg`
-          }
+          { label: 'Water Saved', value: `${getRandomInt(70, 150)} liters` },
+          { label: 'Trees Saved', value: `${(Math.random() * 0.4 + 0.1).toFixed(2)} trees` },
+          { label: 'Textiles Diverted', value: `${(Math.random() * 1.5 + 0.5).toFixed(1)} kg` }
         ];
       } else if (type === 'donate') {
         return [
-          {
-            label: 'People Helped',
-            value: `${getRandomInt(1, 3)} person${Math.random() > 0.5 ? 's' : ''}`
-          },
-          {
-            label: 'Waste Reduced',
-            value: Math.random() > 0.3 ? 'Yes' : 'Likely'
-          },
-          {
-            label: 'Resources Saved',
-            value: getRandomItem(['Moderate', 'High', 'Significant'])
-          }
+          { label: 'People Helped', value: `${getRandomInt(1, 3)} person${Math.random() > 0.5 ? 's' : ''}` },
+          { label: 'Waste Reduced', value: Math.random() > 0.3 ? 'Yes' : 'Likely' },
+          { label: 'Resources Saved', value: getRandomItem(['Moderate', 'High', 'Significant']) }
         ];
       } else if (type === 'upcycle') {
         return [
-          {
-            label: 'New Life Created',
-            value: '✓'
-          },
-          {
-            label: 'Waste Avoided',
-            value: '✓'
-          },
-          {
-            label: 'Resources Saved',
-            value: getRandomItem(['Reused', 'Repurposed', 'Reimagined'])
-          }
+          { label: 'New Life Created', value: '✓' },
+          { label: 'Waste Avoided', value: '✓' },
+          { label: 'Resources Saved', value: getRandomItem(['Reused', 'Repurposed', 'Reimagined']) }
         ];
       }
       return [];
@@ -61,11 +40,15 @@ export default function AnalysisDetailScreen({ route, navigation }) {
     setImpactItems(generateImpacts());
   }, [type]);
 
-  const getRandomInt = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
-
-  const getRandomItem = (arr) =>
-    arr[Math.floor(Math.random() * arr.length)];
+  const goToCenters = () => {
+    if (type === 'recycle') {
+      navigation.navigate('RecyclingCenters');
+    } else if (type === 'donate') {
+      navigation.navigate('DonationCenters');
+    } else if (type === 'upcycle') {
+      navigation.navigate('UpcyclingIdeas');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,10 +66,22 @@ export default function AnalysisDetailScreen({ route, navigation }) {
       </View>
 
       <PrimaryButton
-        title="Done"
-        onPress={() => navigation.navigate('Dashboard')}
-        style={{ marginTop: 32 }}
+        title={
+          type === 'recycle'
+            ? 'View Recycling Centers'
+            : type === 'donate'
+            ? 'View Donation Centers'
+            : 'View Upcycling Ideas'
+        }
+        onPress={goToCenters}
       />
+
+      {fromAnalysis && (
+        <PrimaryButton
+          title="Back to Analysis"
+          onPress={() => navigation.goBack()}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -127,6 +122,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     elevation: 3,
+    marginBottom: 24
   },
   impactRow: {
     flexDirection: 'row',

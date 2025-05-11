@@ -11,11 +11,11 @@ const infrastructureOptions = [
 ];
 
 export default function ProductEntry4_3Screen({ route, navigation }) {
-  const { sentimental, usage, category, material, price } = route.params; // ✅ price eklendi
-  const [infrastructure, setInfrastructure] = useState(null);
+  const { sentimental, usage, category, material, price } = route.params;
+  const [selectedInfrastructure, setSelectedInfrastructure] = useState(null);
 
   const handleNext = () => {
-    if (!infrastructure) {
+    if (!selectedInfrastructure) {
       Alert.alert("Please select an infrastructure option.");
       return;
     }
@@ -25,73 +25,67 @@ export default function ProductEntry4_3Screen({ route, navigation }) {
       usage,
       category,
       material,
-      price,           // ✅ price gönderiliyor
-      infrastructure
+      price,
+      infrastructure: selectedInfrastructure
     });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>What kind of recycling infrastructure is available?</Text>
+      <Text style={styles.title}>Recycling Infrastructure Availability</Text>
 
-      <View style={styles.optionsWrapper}>
-        {infrastructureOptions.map((option) => (
-          <TouchableOpacity
-            key={option}
+      {infrastructureOptions.map((option) => (
+        <TouchableOpacity
+          key={option}
+          style={[
+            styles.option,
+            selectedInfrastructure === option && styles.selected
+          ]}
+          onPress={() => setSelectedInfrastructure(option)}
+        >
+          <Text
             style={[
-              styles.optionButton,
-              infrastructure === option && styles.selectedButton
+              styles.optionText,
+              selectedInfrastructure === option && styles.selectedText
             ]}
-            onPress={() => setInfrastructure(option)}
           >
-            <Text
-              style={[
-                styles.optionText,
-                infrastructure === option && styles.selectedText
-              ]}
-            >
-              {option}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+            {option}
+          </Text>
+        </TouchableOpacity>
+      ))}
 
-      <PrimaryButton title="Next" onPress={handleNext} style={{ marginTop: 32 }} />
+      <PrimaryButton title="Next" onPress={handleNext} />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24 },
+  container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24, justifyContent: 'center' },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '700',
     color: '#3c4a2a',
     marginBottom: 24,
-    textAlign: 'center',
+    textAlign: 'center'
   },
-  optionsWrapper: {
-    gap: 12,
-  },
-  optionButton: {
+  option: {
+    padding: 16,
+    marginVertical: 8,
+    borderRadius: 12,
     backgroundColor: '#b6e158',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 20,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
+    justifyContent: 'center'
   },
-  selectedButton: {
+  selected: {
     borderWidth: 2,
-    borderColor: '#3c4a2a',
+    borderColor: '#3c4a2a'
   },
   optionText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '700',
-    color: '#3c4a2a',
+    color: '#3c4a2a'
   },
   selectedText: {
-    color: '#3c4a2a',
-  },
+    color: '#3c4a2a'
+  }
 });

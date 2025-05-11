@@ -26,7 +26,6 @@ export default function ProductEntry4_5Screen({ route, navigation }) {
       material,
       price: selectedPrice
     });
-    
   };
 
   return (
@@ -42,7 +41,14 @@ export default function ProductEntry4_5Screen({ route, navigation }) {
           ]}
           onPress={() => setSelectedPrice(price)}
         >
-          <Text style={styles.optionText}>{price}</Text>
+          <Text
+            style={[
+              styles.optionText,
+              selectedPrice === price && styles.selectedText
+            ]}
+          >
+            {price}
+          </Text>
         </TouchableOpacity>
       ))}
 
@@ -68,18 +74,22 @@ const styles = StyleSheet.create({
   option: {
     padding: 16,
     marginVertical: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 12,
-    backgroundColor: '#fff',
+    backgroundColor: '#b6e158',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   selected: {
+    borderWidth: 2,
     borderColor: '#3c4a2a',
-    backgroundColor: '#d9f9b1',
   },
   optionText: {
     fontSize: 16,
-    textAlign: 'center',
     fontWeight: '600',
+    color: '#3c4a2a',
   },
+  selectedText: {
+    color: '#3c4a2a',
+    fontWeight: '700'
+  }
 });

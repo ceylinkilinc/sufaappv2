@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { calculateDecisionScores } from '../utils/decisionAlgorithm';
 import PrimaryButton from '../components/PrimaryButton';
-import { useAnalysis } from '../context/AnalysisContext';
+import { Feather } from '@expo/vector-icons';
 
 export default function AnalysisScreen({ route, navigation }) {
   const {
@@ -18,7 +18,6 @@ export default function AnalysisScreen({ route, navigation }) {
   } = route.params;
 
   const [result, setResult] = useState(null);
-  const { addAnalysis } = useAnalysis();
 
   useEffect(() => {
     const scores = calculateDecisionScores({
@@ -28,24 +27,16 @@ export default function AnalysisScreen({ route, navigation }) {
       price,
       infrastructure
     });
-
-    const date = new Date().toLocaleDateString();
-    const type = scores.recommendation;
-
-    addAnalysis({ title, image, type, date });
     setResult(scores);
   }, []);
 
-  const handleDone = () => {
-    navigation.navigate('Dashboard');
-  };
-
-  const handleImpact = () => {
+  const handleImpactPress = (type) => {
     navigation.navigate('AnalysisDetail', {
-      type: result.recommendation,
+      type,
       title,
       image,
-      date: new Date().toLocaleDateString()
+      date: new Date().toLocaleDateString(),
+      fromAnalysis: true
     });
   };
 
@@ -57,23 +48,42 @@ export default function AnalysisScreen({ route, navigation }) {
     );
   }
 
+  const options = ['recycle', 'donate', 'upcycle'];
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Best Option: {result.recommendation.toUpperCase()}</Text>
+      <Text style={styles.title}>Suggested Option</Text>
+
+      <View style={styles.optionsWrapper}>
+        {options.map((option) => {
+          const isRecommended = result.recommendation === option;
+          return (
+            <TouchableOpacity
+              key={option}
+              style={[
+                styles.optionButton,
+                isRecommended ? styles.recommended : styles.normal
+              ]}
+              onPress={() => handleImpactPress(option)}
+            >
+              <Text style={styles.optionText}>{option.toUpperCase()}</Text>
+              {isRecommended && (
+                <Feather name="check" size={20} color="#3c4a2a" style={{ marginLeft: 8 }} />
+              )}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
 
       <Image source={{ uri: image }} style={styles.image} />
-
       <Text style={styles.product}>{title}</Text>
-      <Text style={styles.label}>Recommendation Scores:</Text>
 
-      {Object.entries(result.scores).map(([key, value]) => (
-        <Text key={key} style={styles.score}>
-          {key}: {value}
-        </Text>
-      ))}
-
-      <PrimaryButton title="View Impact" onPress={handleImpact} style={{ marginTop: 24 }} />
-      <PrimaryButton title="Done" onPress={handleDone} style={{ marginTop: 12 }} />
+      <PrimaryButton
+        title="Back to Dashboard"
+        onPress={() => navigation.navigate('Dashboard')}
+        style={styles.backButton}
+        textStyle={styles.backButtonText}
+      />
     </SafeAreaView>
   );
 }
@@ -83,36 +93,63 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8ffe6',
     padding: 24,
-    justifyContent: 'center',
     alignItems: 'center'
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: '700',
     color: '#3c4a2a',
-    marginBottom: 16,
-    textAlign: 'center',
+    marginBottom: 12,
+    textAlign: 'center'
   },
   product: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
     marginTop: 8,
     marginBottom: 16,
+    color: '#3c4a2a'
   },
-  label: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8
+  optionsWrapper: {
+    width: '100%',
+    marginTop: 12,
+    marginBottom: 16,
   },
-  score: {
+  optionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#b6e158',
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    marginBottom: 12,
+    justifyContent: 'center',
+    borderWidth: 2,
+  },
+  recommended: {
+    borderColor: '#3c4a2a'
+  },
+  normal: {
+    borderColor: '#b6e158'
+  },
+  optionText: {
     fontSize: 16,
-    marginVertical: 2
+    fontWeight: '700',
+    color: '#3c4a2a'
   },
   image: {
     width: '100%',
-    height: 200,
-    resizeMode: 'cover',
+    height: 180,
     borderRadius: 16,
-    marginVertical: 16
+    marginVertical: 16,
+    resizeMode: 'cover'
+  },
+  backButton: {
+    paddingVertical: 18, // bir tık büyük
+    paddingHorizontal: 32
+  },
+  backButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#3c4a2a'
   }
 });

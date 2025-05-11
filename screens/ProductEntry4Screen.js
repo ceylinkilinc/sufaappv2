@@ -3,13 +3,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
+const materials = [
+  "100% Cotton / Linen",
+  "Cotton blend",
+  "Polyester blend",
+  "100% synthetic",
+  "Non-recyclable"
+];
+
 export default function ProductEntry4Screen({ route, navigation }) {
   const { sentimental, usage, category } = route.params;
-  const [material, setMaterial] = useState(null);
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   const handleNext = () => {
-    if (!material) {
-      Alert.alert('Please select a material.');
+    if (!selectedMaterial) {
+      Alert.alert("Please select a material");
       return;
     }
 
@@ -17,80 +25,71 @@ export default function ProductEntry4Screen({ route, navigation }) {
       sentimental,
       usage,
       category,
-      material
+      material: selectedMaterial
     });
   };
 
-  const materialOptions = [
-    "100% Cotton / Linen",
-    "Cotton blend",
-    "Polyester blend",
-    "100% synthetic",
-    "Non-recyclable"
-  ];
-
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>What is the material?</Text>
+      <Text style={styles.title}>Select Main Material</Text>
 
-      <View style={styles.optionsWrapper}>
-        {materialOptions.map((mat) => (
-          <TouchableOpacity
-            key={mat}
+      {materials.map((mat) => (
+        <TouchableOpacity
+          key={mat}
+          style={[
+            styles.option,
+            selectedMaterial === mat && styles.selected
+          ]}
+          onPress={() => setSelectedMaterial(mat)}
+        >
+          <Text
             style={[
-              styles.materialButton,
-              material === mat && styles.materialButtonSelected,
+              styles.optionText,
+              selectedMaterial === mat && styles.selectedText
             ]}
-            onPress={() => setMaterial(mat)}
           >
-            <Text
-              style={[
-                styles.materialText,
-                material === mat && styles.materialTextSelected,
-              ]}
-            >
-              {mat}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+            {mat}
+          </Text>
+        </TouchableOpacity>
+      ))}
 
-      <PrimaryButton title="Next" onPress={handleNext} style={{ marginTop: 32 }} />
+      <PrimaryButton title="Next" onPress={handleNext} />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24 },
+  container: {
+    flex: 1,
+    backgroundColor: '#f8ffe6',
+    padding: 24,
+    justifyContent: 'center'
+  },
   title: {
     fontSize: 22,
     fontWeight: '700',
     color: '#3c4a2a',
     marginBottom: 24,
-    textAlign: 'center',
+    textAlign: 'center'
   },
-  optionsWrapper: {
-    gap: 12,
-  },
-  materialButton: {
+  option: {
+    padding: 16,
+    marginVertical: 8,
+    borderRadius: 12,
     backgroundColor: '#b6e158',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 20,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
+    justifyContent: 'center'
   },
-  materialButtonSelected: {
+  selected: {
     borderWidth: 2,
-    borderColor: '#3c4a2a',
+    borderColor: '#3c4a2a'
   },
-  materialText: {
-    fontSize: 14,
+  optionText: {
+    fontSize: 16,
     fontWeight: '700',
-    color: '#3c4a2a',
+    color: '#3c4a2a'
   },
-  materialTextSelected: {
-    color: '#3c4a2a',
-  },
+  selectedText: {
+    color: '#3c4a2a'
+  }
 });

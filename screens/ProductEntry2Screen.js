@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
-const usageOptions = [
+const options = [
   "New / Excellent",
   "Minor wear",
   "Some damage",
@@ -13,26 +13,45 @@ const usageOptions = [
 
 export default function ProductEntry2Screen({ route, navigation }) {
   const { sentimental } = route.params;
+  const [selectedUsage, setSelectedUsage] = useState(null);
 
-  const handleSelect = (usage) => {
+  const handleNext = () => {
+    if (!selectedUsage) {
+      Alert.alert("Please select an option");
+      return;
+    }
+
     navigation.navigate('ProductEntry3', {
       sentimental,
-      usage,
+      usage: selectedUsage
     });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>What is the garment condition?</Text>
+      <Text style={styles.title}>What is the garment's condition?</Text>
 
-      {usageOptions.map((option) => (
-        <PrimaryButton
-          key={option}
-          title={option}
-          onPress={() => handleSelect(option)}
-          style={styles.button}
-        />
+      {options.map((opt) => (
+        <TouchableOpacity
+          key={opt}
+          style={[
+            styles.option,
+            selectedUsage === opt && styles.selected
+          ]}
+          onPress={() => setSelectedUsage(opt)}
+        >
+          <Text
+            style={[
+              styles.optionText,
+              selectedUsage === opt && styles.selectedText
+            ]}
+          >
+            {opt}
+          </Text>
+        </TouchableOpacity>
       ))}
+
+      <PrimaryButton title="Next" onPress={handleNext} />
     </SafeAreaView>
   );
 }
@@ -48,10 +67,27 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: '#3c4a2a',
+    marginBottom: 24,
     textAlign: 'center',
-    marginBottom: 40,
   },
-  button: {
-    marginBottom: 16,
+  option: {
+    padding: 16,
+    marginVertical: 8,
+    borderRadius: 12,
+    backgroundColor: '#b6e158',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  selected: {
+    borderWidth: 2,
+    borderColor: '#3c4a2a',
+  },
+  optionText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#3c4a2a',
+  },
+  selectedText: {
+    color: '#3c4a2a'
+  }
 });
