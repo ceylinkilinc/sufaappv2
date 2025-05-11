@@ -1,12 +1,11 @@
 // utils/firebaseUtils.js
-import { db, auth } from '../firebase'; // compat sistemi kullanılıyor
-import firebase from 'firebase/compat/app'; // timestamp için
+import { db, auth } from '../firebase';       // firebase compat kullanımı
+import firebase from 'firebase/compat/app';    // timestamp için
 
+// Mevcut fonksiyonunuz
 export async function saveAnalysisReport(data) {
   const user = auth.currentUser;
-
   if (!user) throw new Error("User not logged in");
-
   await db.collection('analysis_reports').add({
     uid: user.uid,
     email: user.email,
@@ -21,4 +20,16 @@ export async function saveAnalysisReport(data) {
     infrastructure: data.infrastructure,
     scores: data.scores
   });
+}
+
+// Yeni: Donation lokasyonlarını çek
+export async function fetchDonationLocations() {
+  const snapshot = await db.collection('donation_locations').get();
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+// Yeni: Recycling lokasyonlarını çek
+export async function fetchRecyclingLocations() {
+  const snapshot = await db.collection('recycling_locations').get();
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }

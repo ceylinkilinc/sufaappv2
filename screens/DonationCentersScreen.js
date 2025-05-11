@@ -3,14 +3,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
   StyleSheet,
   ScrollView,
   Linking,
   Platform,
-  ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
-import { db } from '../firebase';
+import { fetchDonationLocations } from '../utils/firebaseUtils';  // yeni import
 
 export default function DonationCentersScreen({ navigation, route }) {
   const [locations, setLocations] = useState([]);
@@ -19,39 +20,38 @@ export default function DonationCentersScreen({ navigation, route }) {
   const title = route?.params?.title || 'Unnamed Product';
   const fromRecommendation = route?.params?.fromRecommendation;
 
+  // Maps açma fonksiyonu (iOS: Apple Maps, Android: geo URI)
+  const openInMaps = (lat, lng, label) => {
+    const url =
+      Platform.OS === 'ios'
+        ? `http://maps.apple.com/?q=${encodeURIComponent(label)}&ll=${lat},${lng}`
+        : `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label)})`;
+
+    Linking.canOpenURL(url)
+      .then(supported => {
+        if (supported) return Linking.openURL(url);
+        Alert.alert('Harita açılamıyor', url);
+      })
+      .catch(err => Alert.alert('Bir hata oluştu', err.message));
+  };
+
+  useEffect(() => {
+    fetchDonationLocations()
+      .then(data => setLocations(data))
+      .catch(err => {
+        console.error(err);
+        Alert.alert('Lokasyon verisi çekilemedi', err.message);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleDone = () => {
     if (fromRecommendation) {
-      navigation.navigate('Impact', {
-        type: 'donation',
-        title,
-      });
+      navigation.navigate('Impact', { type: 'donation', title });
     } else {
       navigation.navigate('Dashboard');
     }
   };
-
-  const openInMaps = (lat, lng, label) => {
-    const url = Platform.select({
-      ios: `http://maps.apple.com/?q=${encodeURIComponent(label)}&ll=${lat},${lng}`,
-      android: `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label)})`,
-    });
-    Linking.openURL(url);
-  };
-
-  useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const snapshot = await db.collection('donation_locations').get();
-        const data = snapshot.docs.map(doc => doc.data());
-        setLocations(data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Lokasyon verisi çekilemedi:', err);
-      }
-    };
-
-    fetchLocations();
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,8 +61,8 @@ export default function DonationCentersScreen({ navigation, route }) {
         {loading ? (
           <ActivityIndicator size="large" color="#3c4a2a" />
         ) : (
-          locations.map((loc, index) => (
-            <View key={index} style={styles.card}>
+          locations.map(loc => (
+            <View key={loc.id} style={styles.card}>
               <Text style={styles.name}>{loc.address}</Text>
               <TouchableOpacity
                 style={styles.mapButton}
