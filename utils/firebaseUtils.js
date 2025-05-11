@@ -9,6 +9,7 @@ export async function saveAnalysisReport(data) {
 
   await db.collection('analysis_reports').add({
     uid: user.uid,
+    email: user.email,
     title: data.title,
     type: data.type,
     date: firebase.firestore.FieldValue.serverTimestamp(),
