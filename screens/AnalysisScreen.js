@@ -61,14 +61,19 @@ export default function AnalysisScreen({ route, navigation }) {
   }, []);
 
   const handleImpactPress = (type) => {
-    navigation.navigate('AnalysisDetail', {
-      type,
-      title,
-      image,
-      date: new Date().toLocaleDateString(),
-      fromAnalysis: true
-    });
+    if (type === 'upcycle') {
+      navigation.navigate('UpcyclingIdeas', { category });
+    } else {
+      navigation.navigate('AnalysisDetail', {
+        type,
+        title,
+        image,
+        date: new Date().toLocaleDateString(),
+        fromAnalysis: true
+      });
+    }
   };
+  
 
   if (!result) {
     return (

@@ -18,7 +18,6 @@ import ProductEntry4_3Screen from './screens/ProductEntry4_3Screen';
 import ProductEntry4_5Screen from './screens/ProductEntry4_5Screen';
 import ProductEntry5Screen from './screens/ProductEntry5Screen';
 import AnalysisScreen from './screens/AnalysisScreen';
-
 import AnalyzingScreen from './screens/AnalyzingScreen';
 import RecommendationScreen from './screens/RecommendationScreen';
 import RecyclingCentersScreen from './screens/RecyclingCentersScreen';
@@ -66,10 +65,9 @@ export default function App() {
             <Stack.Screen name="AnalysisDetail" component={AnalysisDetailScreen} />
             <Stack.Screen name="Impact" component={ImpactScreen} />
             <Stack.Screen name="MyReports" component={MyReportsScreen} />
-
           </Stack.Navigator>
         </NavigationContainer>
       </AnalysisProvider>
     </SafeAreaProvider>
   );
-}
+} 

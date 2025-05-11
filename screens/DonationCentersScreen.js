@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Linking,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
+import { db } from '../firebase';
 
 export default function DonationCentersScreen({ navigation, route }) {
-  const centers = [
-    { name: 'Local Donation Point' },
-    { name: 'Second Chance Store' },
-    { name: 'Community Hub' },
-  ];
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const title = route?.params?.title || 'Unnamed Product';
   const fromRecommendation = route?.params?.fromRecommendation;
@@ -23,18 +30,49 @@ export default function DonationCentersScreen({ navigation, route }) {
     }
   };
 
+  const openInMaps = (lat, lng, label) => {
+    const url = Platform.select({
+      ios: `http://maps.apple.com/?q=${encodeURIComponent(label)}&ll=${lat},${lng}`,
+      android: `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label)})`,
+    });
+    Linking.openURL(url);
+  };
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const snapshot = await db.collection('donation_locations').get();
+        const data = snapshot.docs.map(doc => doc.data());
+        setLocations(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Lokasyon verisi çekilemedi:', err);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>Donation Points</Text>
-        {centers.map((center, index) => (
-          <View key={index} style={styles.card}>
-            <Text style={styles.name}>{center.name}</Text>
-            <TouchableOpacity style={styles.mapButton}>
-              <Text style={styles.mapButtonText}>Google Map</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+        <Text style={styles.title}>Donation Locations</Text>
+
+        {loading ? (
+          <ActivityIndicator size="large" color="#3c4a2a" />
+        ) : (
+          locations.map((loc, index) => (
+            <View key={index} style={styles.card}>
+              <Text style={styles.name}>{loc.address}</Text>
+              <TouchableOpacity
+                style={styles.mapButton}
+                onPress={() => openInMaps(loc.latitude, loc.longitude, loc.address)}
+              >
+                <Text style={styles.mapButtonText}>Open in Maps</Text>
+              </TouchableOpacity>
+            </View>
+          ))
+        )}
       </ScrollView>
 
       <TouchableOpacity style={styles.doneButton} onPress={handleDone}>

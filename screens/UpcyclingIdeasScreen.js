@@ -1,94 +1,122 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Linking, Alert } from 'react-native';
+import PrimaryButton from '../components/PrimaryButton';
 
-export default function UpcyclingIdeasScreen({ navigation, route }) {
-  const ideas = [
-    { name: 'Tote Bag from Old Shirt' },
-    { name: 'Denim Patch Pillow' },
-    { name: 'Jar Cap Pincushion' },
-  ];
+const ideasByCategory = {
+  tops_dresses: [
+    "Crop the shirt and add fringe",
+    "Use the fabric for scrunchies",
+    "Turn an old dress into a two-piece outfit",
+    "Frame embroidery from the chest area",
+    "Make headbands from sleeves"
+  ],
+  bottoms: [
+    "Turn old jeans into a skirt",
+    "Cut sweatpants into summer shorts",
+    "Make a pouch from trouser pockets",
+    "Use linen pants for storage bins",
+    "Sew thick cotton pants into dog toys"
+  ],
+  undergarments: [
+    "Use lace for small pouches",
+    "Make reusable cotton pads",
+    "Turn bras into bra bags",
+    "DIY bracelets from elastic bands",
+    "Make heat packs from old socks"
+  ]
+};
 
-  const title = route?.params?.title || 'Unnamed Product';
-  const fromRecommendation = route?.params?.fromRecommendation;
+export default function UpcyclingIdeasScreen({ route, navigation }) {
+  const category = route?.params?.category;
+  const isFiltered = !!category;
 
-  const handleDone = () => {
-    if (fromRecommendation) {
-      navigation.navigate('Impact', {
-        type: 'upcycle',
-        title,
-      });
-    } else {
-      navigation.navigate('Dashboard');
+  let ideas = [];
+  if (isFiltered) {
+    ideas = ideasByCategory[category] || [];
+  } else {
+    Object.values(ideasByCategory).forEach(arr => {
+      ideas = [...ideas, ...arr];
+    });
+  }
+
+  const pinterestSearchUrl = isFiltered
+    ? `https://www.google.com/search?q=${encodeURIComponent(category.replace('_', ' ') + " upcycling ideas site:pinterest.com")}`
+    : null;
+
+  const handleOpenPinterest = async () => {
+    try {
+      const supported = await Linking.canOpenURL(pinterestSearchUrl);
+      if (supported) {
+        await Linking.openURL(pinterestSearchUrl);
+      } else {
+        Alert.alert("Error", "Can't open Pinterest search link.");
+      }
+    } catch (err) {
+      Alert.alert("Error", "Something went wrong while opening the link.");
+      console.error(err);
     }
   };
 
+  const renderItem = ({ item }) => (
+    <View style={styles.ideaCard}>
+      <Text style={styles.ideaText}>• {item}</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>Upcycling Ideas</Text>
-        {ideas.map((idea, index) => (
-          <View key={index} style={styles.card}>
-            <Text style={styles.name}>{idea.name}</Text>
-            <TouchableOpacity style={styles.mapButton}>
-              <Text style={styles.mapButtonText}>Show</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
+      <Text style={styles.title}>
+        {isFiltered
+          ? `Upcycle Ideas for Your ${category.replace('_', ' ')}`
+          : 'Upcycle Ideas for All Categories'}
+      </Text>
 
-      <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
-        <Text style={styles.doneText}>Done</Text>
-      </TouchableOpacity>
+      <FlatList
+        data={ideas}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 24 }}
+      />
+
+      {pinterestSearchUrl && (
+        <PrimaryButton
+          title="See More on Pinterest"
+          onPress={handleOpenPinterest}
+        />
+      )}
+
+      <PrimaryButton
+        title="Back to Dashboard"
+        onPress={() => navigation.navigate('Dashboard')}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8ffe6' },
-  scroll: { padding: 24 },
+  container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24 },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
+    color: '#3c4a2a',
     marginBottom: 16,
-    color: '#2d2d2d',
+    textAlign: 'center'
   },
-  card: {
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingBottom: 16,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: '600',
+  ideaCard: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 12,
     marginBottom: 12,
-    color: '#000',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
   },
-  mapButton: {
-    backgroundColor: '#7ac81e',
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 25,
-    alignSelf: 'flex-start',
-  },
-  mapButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  doneButton: {
-    backgroundColor: '#b6e158',
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 24,
-    marginBottom: 24,
-    borderRadius: 20,
-  },
-  doneText: {
-    fontWeight: '700',
+  ideaText: {
     fontSize: 16,
-    color: '#000',
+    color: '#3c4a2a',
+    fontWeight: '500',
   },
 });

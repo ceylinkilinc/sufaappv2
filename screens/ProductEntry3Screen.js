@@ -3,18 +3,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
-const categories = [
-  "Tops / Dresses",
-  "Bottoms",
-  "Under Garments"
+const categoryOptions = [
+  { label: "Tops / Dresses", value: "tops_dresses" },
+  { label: "Bottoms", value: "bottoms" },
+  { label: "Under Garments", value: "undergarments" }
 ];
 
 export default function ProductEntry3Screen({ route, navigation }) {
   const { sentimental, usage } = route.params;
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const handleNext = () => {
-    if (!selectedCategory) {
+    if (!selected) {
       Alert.alert("Please select a category");
       return;
     }
@@ -22,7 +22,7 @@ export default function ProductEntry3Screen({ route, navigation }) {
     navigation.navigate('ProductEntry4', {
       sentimental,
       usage,
-      category: selectedCategory
+      category: selected.value
     });
   };
 
@@ -30,22 +30,22 @@ export default function ProductEntry3Screen({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>What is the product category?</Text>
 
-      {categories.map((cat) => (
+      {categoryOptions.map((cat) => (
         <TouchableOpacity
-          key={cat}
+          key={cat.value}
           style={[
             styles.option,
-            selectedCategory === cat && styles.selected
+            selected?.value === cat.value && styles.selected
           ]}
-          onPress={() => setSelectedCategory(cat)}
+          onPress={() => setSelected(cat)}
         >
           <Text
             style={[
               styles.optionText,
-              selectedCategory === cat && styles.selectedText
+              selected?.value === cat.value && styles.selectedText
             ]}
           >
-            {cat}
+            {cat.label}
           </Text>
         </TouchableOpacity>
       ))}
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 8,
     borderRadius: 12,
-    backgroundColor: '#b6e158',
+    backgroundColor: '#D4EC8F',
     alignItems: 'center',
     justifyContent: 'center',
   },
