@@ -1,7 +1,9 @@
+// screens/DashboardScreen.js
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import DashboardTip from '../components/DashboardTip';  // ← EKLENDİ
 
 export default function DashboardScreen({ navigation }) {
   return (
@@ -17,6 +19,9 @@ export default function DashboardScreen({ navigation }) {
 
         <Text style={styles.welcome}>Welcome to SuFa</Text>
         <Text style={styles.subtitle}>Dashboard</Text>
+
+        {/* 🌱 Günlük sürdürülebilirlik ipucu */}
+        <DashboardTip />
 
         {/* Grid */}
         <View style={styles.grid}>
