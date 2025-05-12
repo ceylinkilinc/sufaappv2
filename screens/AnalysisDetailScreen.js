@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
 export default function AnalysisDetailScreen({ route, navigation }) {
-  const { title, type, date, image, fromAnalysis } = route.params || {};
+  const { title, type, date, image, fromAnalysis, category } = route.params || {};
   const [impactItems, setImpactItems] = useState([]);
 
   useEffect(() => {
@@ -45,9 +45,14 @@ export default function AnalysisDetailScreen({ route, navigation }) {
       navigation.navigate('RecyclingCenters');
     } else if (type === 'donate') {
       navigation.navigate('DonationCenters');
-    } else if (type === 'upcycle') {
-      navigation.navigate('UpcyclingIdeas');
+    }  else if (type === 'upcycle') {
+      navigation.navigate('UpcyclingIdeas', {
+        fromRecommendation: true,
+        category, // 💥 kategori parametresini gönder
+        title
+      });
     }
+    
   };
 
   return (

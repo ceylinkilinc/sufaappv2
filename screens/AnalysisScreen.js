@@ -61,18 +61,16 @@ export default function AnalysisScreen({ route, navigation }) {
   }, []);
 
   const handleImpactPress = (type) => {
-    if (type === 'upcycle') {
-      navigation.navigate('UpcyclingIdeas', { category });
-    } else {
-      navigation.navigate('AnalysisDetail', {
-        type,
-        title,
-        image,
-        date: new Date().toLocaleDateString(),
-        fromAnalysis: true
-      });
-    }
+    navigation.navigate('AnalysisDetail', {
+      type,
+      title,
+      image,
+      date: new Date().toLocaleDateString(),
+      fromAnalysis: true,
+      category 
+    });
   };
+  
   
 
   if (!result) {
