@@ -23,24 +23,23 @@ export default function AccountInfoScreen({ navigation }) {
     dob: '',
   });
 
-  // Firestore’dan oku
   useEffect(() => {
     if (!uid) return;
     const unsub = db
       .collection('users')
       .doc(uid)
-      .onSnapshot(doc => {
-        if (doc.exists) {
-          setInfo(doc.data());
+      .onSnapshot(
+        doc => {
+          if (doc.exists) setInfo(doc.data());
+        },
+        err => {
+          console.error(err);
+          Alert.alert('Error', 'Could not load your info.');
         }
-      }, err => {
-        console.error(err);
-        Alert.alert('Error', 'Could not load your info.');
-      });
+      );
     return () => unsub();
   }, [uid]);
 
-  // Kaydet ve geri dön
   const handleSave = () => {
     if (!uid) return;
     db.collection('users')
@@ -111,13 +110,16 @@ export default function AccountInfoScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flexGrow: 1 },
+  container: {
+    padding: 24,      
+    flexGrow: 1
+  },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#3c4a2a',
+    fontSize: 24,     
+    fontWeight: '700',
+    marginBottom: 16,
+    textAlign: 'left',
+    color: '#2d2d2d', 
   },
   input: {
     borderWidth: 1,

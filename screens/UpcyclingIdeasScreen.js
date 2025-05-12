@@ -69,7 +69,7 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
       <Text style={styles.title}>
         {isFiltered
           ? `Upcycle Ideas for Your ${category.replace('_', ' ')}`
-          : 'Upcycle Ideas for All Categories'}
+          : 'Upcycle Ideas'}
       </Text>
 
       <FlatList
@@ -97,11 +97,11 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24 },
   title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#3c4a2a',
-    marginBottom: 16,
-    textAlign: 'center'
+    fontSize: 24,        // RecyclingLocations ile aynı boy
+    fontWeight: '700',    // aynı ağırlık
+    marginBottom: 16,     // aynı alt boşluk
+    color: '#2d2d2d',     // aynı renk
+    textAlign: 'left',    // sola hizalı
   },
   ideaCard: {
     backgroundColor: '#ffffff',

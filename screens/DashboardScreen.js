@@ -15,7 +15,7 @@ export default function DashboardScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.welcome}>Welcome</Text>
+        <Text style={styles.welcome}>Welcome to SuFa</Text>
         <Text style={styles.subtitle}>Dashboard</Text>
 
         {/* Grid */}
@@ -46,7 +46,7 @@ export default function DashboardScreen({ navigation }) {
           >
             <Feather name="map" size={22} color="#3c4a2a" style={styles.icon} />
             <Text style={styles.cardText}>
-              Recycling{'\n'}Centers
+              Recycling{'\n'}Locations
             </Text>
           </TouchableOpacity>
 
@@ -56,7 +56,7 @@ export default function DashboardScreen({ navigation }) {
           >
             <Feather name="gift" size={22} color="#3c4a2a" style={styles.icon} />
             <Text style={styles.cardText}>
-              Donation{'\n'}Centers
+              Donation{'\n'}Locations
             </Text>
           </TouchableOpacity>
 
@@ -66,7 +66,7 @@ export default function DashboardScreen({ navigation }) {
           >
             <Feather name="zap" size={22} color="#3c4a2a" style={styles.icon} />
             <Text style={styles.cardText}>
-              Upcycling{'\n'}Ideas
+              Upcycle{'\n'}Ideas
             </Text>
           </TouchableOpacity>
         </View>

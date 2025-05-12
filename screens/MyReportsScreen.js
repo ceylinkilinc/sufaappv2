@@ -9,7 +9,7 @@ import {
   Image
 } from 'react-native';
 import { useAnalysis } from '../context/AnalysisContext';
-import PrimaryButton from '../components/PrimaryButton'; // 🌟
+import PrimaryButton from '../components/PrimaryButton';
 
 export default function MyReportsScreen({ navigation }) {
   const { entries } = useAnalysis();
@@ -35,7 +35,7 @@ export default function MyReportsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>My Analysis Reports</Text>
+      <Text style={styles.header}>Analysis Reports</Text>
 
       {entries.length === 0 ? (
         <Text style={styles.empty}>No analyses yet.</Text>
@@ -48,7 +48,6 @@ export default function MyReportsScreen({ navigation }) {
         />
       )}
 
-      {/* 🔙 Geri butonu */}
       <PrimaryButton
         title="Back to Dashboard"
         onPress={() => navigation.navigate('Dashboard')}
@@ -59,19 +58,23 @@ export default function MyReportsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24 },
+  container: {
+    flex: 1,
+    backgroundColor: '#f8ffe6',
+    padding: 24,
+  },
   header: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#3c4a2a',
-    marginBottom: 20,
-    textAlign: 'center'
+    fontSize: 24,        // recycling ile eşitlendi
+    fontWeight: '700',    // aynı ağırlık
+    marginBottom: 16,     // aynı alt boşluk
+    color: '#2d2d2d',     // aynı renk
+    textAlign: 'left',    // sola hizalı
   },
   empty: {
     textAlign: 'center',
     fontSize: 16,
     color: '#666',
-    marginTop: 32
+    marginTop: 32,
   },
   card: {
     backgroundColor: '#fff',
@@ -82,27 +85,27 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4
+    shadowRadius: 4,
   },
   image: {
     width: '100%',
     height: 140,
     borderRadius: 12,
-    marginBottom: 12
+    marginBottom: 12,
   },
   title: {
     fontSize: 18,
     fontWeight: '600',
     color: '#3c4a2a',
-    marginBottom: 4
+    marginBottom: 4,
   },
   type: {
     fontSize: 14,
     color: '#6b8e23',
-    marginBottom: 2
+    marginBottom: 2,
   },
   date: {
     fontSize: 12,
-    color: '#888'
-  }
+    color: '#888',
+  },
 });
