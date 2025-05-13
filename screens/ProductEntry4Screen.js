@@ -5,9 +5,7 @@ import PrimaryButton from '../components/PrimaryButton';
 
 const materials = [
   "100% Cotton / Linen",
-  "Cotton blend",
   "Polyester blend",
-  "100% synthetic",
   "Non-recyclable"
 ];
 

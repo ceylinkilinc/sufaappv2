@@ -3,19 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
-const sentiments = [
-  "Deeply meaningful",
-  "Moderate emotional value",
-  "Slight attachment",
-  "No sentiment"
-];
+const sentiments = ["Yes", "No"]; // 💥 Güncel seçenekler
 
 export default function ProductEntry1Screen({ navigation }) {
   const [selectedSentiment, setSelectedSentiment] = useState(null);
 
   const handleNext = () => {
     if (!selectedSentiment) {
-      Alert.alert("Please select a sentiment level");
+      Alert.alert("Please select a sentimental value");
       return;
     }
 

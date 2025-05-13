@@ -1,40 +1,78 @@
-// utils/decisionAlgorithm.js
+const sentimentalMap = {
+  Yes: 1,
+  No: 0
+};
 
-const usageMap = {
-  "New / Excellent": 1.0,
-  "Minor wear": 0.8,
-  "Some damage": 0.5,
-  "Significant damage": 0.2,
-  "Unwearable": 0.0
+const conditionMap = {
+  recycle: {
+    "Unwearable": 1.0,
+    "Some damage": 0.5,
+    "New / Excellent": 0.0
+  },
+  donate: {
+    "New / Excellent": 1.0,
+    "Some damage": 0.5,
+    "Unwearable": 0.0
+  },
+  upcycle: {
+    "Some damage": 1.0,
+    "New / Excellent": 0.5,
+    "Unwearable": 0.5
+  }
 };
 
 const materialMap = {
-  "100% Cotton / Linen": 1.0,
-  "Cotton blend": 0.7,
-  "Polyester blend": 0.45,
-  "100% synthetic": 0.2,
-  "Non-recyclable": 0.0
+  recycle: {
+    "100% Cotton / Linen": 0.9,
+    "Polyester blend": 0.2,
+    "Non-recyclable": 0.0
+  },
+  donate: {
+    "100% Cotton / Linen": 0.7,
+    "Polyester blend": 0.4,
+    "Non-recyclable": 0.1
+  },
+  upcycle: {
+    "100% Cotton / Linen": 0.0,
+    "Polyester blend": 0.7,
+    "Non-recyclable": 1.0
+  }
 };
 
 const priceMap = {
-  "3000 TL +": 1.0,
-  "1000-3000": 0.6,
-  "1-1000": 0.3,
-  "Free / gifted": 0.1
+  recycle: {
+    "Free / gifted": 1.0,
+    "0-3000": 0.6,
+    "3000 TL +": 0.2
+  },
+  donate: {
+    "Free / gifted": 1.0,
+    "0-3000": 0.6,
+    "3000 TL +": 0.8
+  },
+  upcycle: {
+    "Free / gifted": 1.0,
+    "0-3000": 0.6,
+    "3000 TL +": 0.2
+  }
 };
 
 const infrastructureMap = {
-  "Recycling bin nearby": 1.0,
-  "Textile bin in neighborhood": 0.8,
-  "Needs transport or shipping": 0.5,
-  "No known recycling options": 0.2
-};
-
-const sentimentalMap = {
-  "Deeply meaningful": 1.0,
-  "Moderate emotional value": 0.7,
-  "Slight attachment": 0.4,
-  "No sentiment": 0.1
+  recycle: {
+    "Recycling bin and Upcycling options nearby": 1.0,
+    "Needs transport or shipping": 0.5,
+    "No known recycling  or upcycling options": 0.0
+  },
+  donate: {
+    "Recycling bin nearby (same day)": 1.0,
+    "Needs transport or shipping": 0.5,
+    "No known recycling options": 0.0
+  },
+  upcycle: {
+    "Recycling bin and Upcycling options nearby": 1.0,
+    "Needs transport or shipping": 0.5,
+    "No known recycling  or upcycling options": 0.0
+  }
 };
 
 const weights = {
@@ -57,21 +95,22 @@ const weights = {
     material: 0.2,
     price: 0.1,
     infrastructure: 0.2,
-    sentimental: 0.2  // ↓ düşürüldü
+    sentimental: 0.2
   }
 };
 
 export function calculateDecisionScores(input) {
-  const usageScore = usageMap[input.usage] ?? 0;
-  const materialScore = materialMap[input.material] ?? 0;
-  const priceScore = priceMap[input.price] ?? 0;
-  const infraScore = infrastructureMap[input.infrastructure] ?? 0;
-  const sentimentalScore = sentimentalMap[input.sentimental] ?? 0;
-
   const scores = {};
 
   for (const option of ["recycle", "donate", "upcycle"]) {
     const w = weights[option];
+
+    const usageScore = conditionMap[option][input.usage] ?? 0;
+    const materialScore = materialMap[option][input.material] ?? 0;
+    const priceScore = priceMap[option][input.price] ?? 0;
+    const infraScore = infrastructureMap[option][input.infrastructure] ?? 0;
+    const sentimentalScore = sentimentalMap[input.sentimental] ?? 0;
+
     const total =
       usageScore * w.usage +
       materialScore * w.material +

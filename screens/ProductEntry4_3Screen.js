@@ -4,10 +4,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
 const infrastructureOptions = [
-  "Recycling bin nearby",
-  "Textile bin in neighborhood",
+  "Recycling bin and Upcycling options nearby",
   "Needs transport or shipping",
-  "No known recycling options"
+  "No known recycling  or upcycling options"
 ];
 
 export default function ProductEntry4_3Screen({ route, navigation }) {

@@ -3,50 +3,47 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 
-const options = [
+const conditionOptions = [
   "New / Excellent",
-  "Minor wear",
   "Some damage",
-  "Significant damage",
   "Unwearable"
 ];
 
-export default function ProductEntry2Screen({ route, navigation }) {
-  const { sentimental } = route.params;
-  const [selectedUsage, setSelectedUsage] = useState(null);
+export default function ProductEntry2Screen({ navigation, route }) {
+  const [selectedCondition, setSelectedCondition] = useState(null);
 
   const handleNext = () => {
-    if (!selectedUsage) {
-      Alert.alert("Please select an option");
+    if (!selectedCondition) {
+      Alert.alert("Please select the item's condition");
       return;
     }
 
     navigation.navigate('ProductEntry3', {
-      sentimental,
-      usage: selectedUsage
+      ...route.params,
+      usage: selectedCondition
     });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>What is the garment's condition?</Text>
+      <Text style={styles.title}>What is the item's condition?</Text>
 
-      {options.map((opt) => (
+      {conditionOptions.map((cond) => (
         <TouchableOpacity
-          key={opt}
+          key={cond}
           style={[
             styles.option,
-            selectedUsage === opt && styles.selected
+            selectedCondition === cond && styles.selected
           ]}
-          onPress={() => setSelectedUsage(opt)}
+          onPress={() => setSelectedCondition(cond)}
         >
           <Text
             style={[
               styles.optionText,
-              selectedUsage === opt && styles.selectedText
+              selectedCondition === cond && styles.selectedText
             ]}
           >
-            {opt}
+            {cond}
           </Text>
         </TouchableOpacity>
       ))}
@@ -61,14 +58,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8ffe6',
     padding: 24,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   title: {
     fontSize: 22,
     fontWeight: '700',
     color: '#3c4a2a',
     marginBottom: 24,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   option: {
     padding: 16,
@@ -76,16 +73,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#D4EC8F',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   selected: {
     borderWidth: 2,
-    borderColor: '#3c4a2a',
+    borderColor: '#3c4a2a'
   },
   optionText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#3c4a2a',
+    color: '#3c4a2a'
   },
   selectedText: {
     color: '#3c4a2a'

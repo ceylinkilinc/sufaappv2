@@ -5,8 +5,7 @@ import PrimaryButton from '../components/PrimaryButton';
 
 const priceOptions = [
   "Free / gifted",
-  "1-1000",
-  "1000-3000",
+  "0-3000",
   "3000 TL +"
 ];
 
