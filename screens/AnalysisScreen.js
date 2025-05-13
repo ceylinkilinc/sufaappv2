@@ -5,6 +5,7 @@ import { calculateDecisionScores } from '../utils/decisionAlgorithm';
 import PrimaryButton from '../components/PrimaryButton';
 import { Feather } from '@expo/vector-icons';
 import { saveAnalysisReport } from '../utils/firebaseUtils';
+import { saveImageToStorage } from '../utils/storageUtils'; // ✅ GÖRSEL YÜKLEME EKLENDİ
 import { useAnalysis } from '../context/AnalysisContext';
 
 export default function AnalysisScreen({ route, navigation }) {
@@ -20,41 +21,52 @@ export default function AnalysisScreen({ route, navigation }) {
   } = route.params;
 
   const [result, setResult] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(image); // ✅ yüklenen url’i burada tut
   const { addEntry } = useAnalysis();
 
   useEffect(() => {
-    const scores = calculateDecisionScores({
-      sentimental,
-      usage,
-      material,
-      price,
-      infrastructure
-    });
+    const process = async () => {
+      const scores = calculateDecisionScores({
+        sentimental,
+        usage,
+        material,
+        price,
+        infrastructure
+      });
 
-    setResult(scores);
+      setResult(scores);
 
-    const entryData = {
-      sentimental,
-      usage,
-      material,
-      price,
-      infrastructure,
-      title,
-      image,
-      scores,
-      type: scores.recommendation
+      let imageUrl = image;
+      try {
+        imageUrl = await saveImageToStorage(image);
+        setUploadedImage(imageUrl); // ✅ Yüklenen URL ile güncelle
+      } catch (err) {
+        console.warn("Image upload failed, using local URI.");
+      }
+
+      const entryData = {
+        sentimental,
+        usage,
+        material,
+        price,
+        infrastructure,
+        title,
+        image: imageUrl,
+        scores,
+        type: scores.recommendation
+      };
+
+      await saveAnalysisReport(entryData).catch((err) =>
+        console.error("Firebase save error:", err)
+      );
+
+      addEntry({
+        ...entryData,
+        date: new Date().toLocaleDateString()
+      });
     };
 
-    // 1. Firebase'e kaydet
-    saveAnalysisReport(entryData).catch((err) =>
-      console.error("Firebase save error:", err)
-    );
-
-    // 2. Context'e de ekle (MyReportsScreen için değil ama görsel akışta gerekirse)
-    addEntry({
-      ...entryData,
-      date: new Date().toLocaleDateString()
-    });
+    process();
   }, []);
 
   const handleImpactPress = (type) => {
@@ -62,14 +74,14 @@ export default function AnalysisScreen({ route, navigation }) {
       navigation.navigate('Impact', {
         type: 'upcycle',
         title,
-        image,
+        image: uploadedImage,
         category
       });
     } else {
       navigation.navigate('AnalysisDetail', {
         type,
         title,
-        image,
+        image: uploadedImage,
         date: new Date().toLocaleDateString(),
         fromAnalysis: true
       });
@@ -111,7 +123,7 @@ export default function AnalysisScreen({ route, navigation }) {
         })}
       </View>
 
-      <Image source={{ uri: image }} style={styles.image} />
+      <Image source={{ uri: uploadedImage }} style={styles.image} />
       <Text style={styles.product}>{title}</Text>
     </SafeAreaView>
   );
