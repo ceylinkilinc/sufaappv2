@@ -118,12 +118,6 @@ export default function AnalysisScreen({ route, navigation }) {
       <Image source={{ uri: image }} style={styles.image} />
       <Text style={styles.product}>{title}</Text>
 
-      <PrimaryButton
-        title="Back to Dashboard"
-        onPress={() => navigation.navigate('Dashboard')}
-        style={styles.backButton}
-        textStyle={styles.backButtonText}
-      />
     </SafeAreaView>
   );
 }
@@ -183,13 +177,5 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     resizeMode: 'cover'
   },
-  backButton: {
-    paddingVertical: 18,
-    paddingHorizontal: 32
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#3c4a2a'
-  }
+  
 });

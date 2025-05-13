@@ -45,14 +45,13 @@ export default function AnalysisDetailScreen({ route, navigation }) {
       navigation.navigate('RecyclingCenters');
     } else if (type === 'donate') {
       navigation.navigate('DonationCenters');
-    }  else if (type === 'upcycle') {
+    } else if (type === 'upcycle') {
       navigation.navigate('UpcyclingIdeas', {
         fromRecommendation: true,
-        category, // 💥 kategori parametresini gönder
-        title
+        category,
+        title,
       });
     }
-    
   };
 
   return (
@@ -70,23 +69,20 @@ export default function AnalysisDetailScreen({ route, navigation }) {
         ))}
       </View>
 
-      <PrimaryButton
-        title={
-          type === 'recycle'
-            ? 'View Recycling Centers'
-            : type === 'donate'
-            ? 'View Donation Centers'
-            : 'View Upcycling Ideas'
-        }
-        onPress={goToCenters}
-      />
-
       {fromAnalysis && (
         <PrimaryButton
-          title="Back to Analysis"
-          onPress={() => navigation.goBack()}
+          title={
+            type === 'recycle'
+              ? 'View Recycling Centers'
+              : type === 'donate'
+              ? 'View Donation Centers'
+              : 'View Upcycling Ideas'
+          }
+          onPress={goToCenters}
         />
       )}
+
+      <PrimaryButton title="Back" onPress={() => navigation.goBack()} />
     </SafeAreaView>
   );
 }
@@ -94,54 +90,40 @@ export default function AnalysisDetailScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     backgroundColor: '#f8ffe6',
-    padding: 24,
-    justifyContent: 'center',
   },
   image: {
     width: '100%',
-    height: 180,
+    height: 200,
     borderRadius: 16,
-    marginBottom: 24,
-    resizeMode: 'cover',
+    marginBottom: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#3c4a2a',
-    textAlign: 'center',
-    marginBottom: 8,
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 4,
   },
   subtitle: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 24,
+    fontSize: 16,
+    color: 'gray',
+    marginBottom: 16,
   },
   impactBox: {
-    backgroundColor: '#ffffff',
-    padding: 20,
+    backgroundColor: '#f8ffe6',
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 3,
-    marginBottom: 24
+    padding: 16,
+    marginBottom: 20,
   },
   impactRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#3c4a2a',
+    fontWeight: 'bold',
   },
   value: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#3c4a2a',
+    color: '#555',
   },
 });

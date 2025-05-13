@@ -51,7 +51,7 @@ export default function ProductEntry4_5Screen({ route, navigation }) {
         </TouchableOpacity>
       ))}
 
-      <PrimaryButton title="Continue" onPress={handleContinue} />
+      <PrimaryButton title="Next" onPress={handleContinue} />
     </SafeAreaView>
   );
 }

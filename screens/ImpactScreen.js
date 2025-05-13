@@ -32,19 +32,6 @@ export default function ImpactScreen({ route, navigation }) {
     ],
   };
 
-  const handleDone = () => {
-    const newEntry = {
-      id: Date.now(),
-      type,
-      title: title || 'Untitled',
-      date: new Date().toLocaleString(),
-      image: image || null,
-    };
-
-    addEntry(newEntry);
-    navigation.navigate('Dashboard');
-  };
-
   const handleViewIdeas = () => {
     navigation.navigate('UpcyclingIdeas', {
       title,
@@ -91,7 +78,6 @@ export default function ImpactScreen({ route, navigation }) {
         </>
       )}
 
-      <PrimaryButton title="Done" onPress={handleDone} style={{ marginTop: 32 }} />
     </SafeAreaView>
   );
 }
