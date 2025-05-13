@@ -94,6 +94,13 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
           style={{ marginTop: 0 }}
         />
       )}
+      {fromAnalysis && (
+        <PrimaryButton
+          title="Back"
+          onPress={() => navigation.goBack()}
+          style={{ marginTop: 12 }}
+        />
+      )}
 
       {/* always show “Back to Dashboard” */}
       <PrimaryButton

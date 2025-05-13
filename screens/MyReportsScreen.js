@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   View,
@@ -8,11 +8,23 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
-import { useAnalysis } from '../context/AnalysisContext';
 import PrimaryButton from '../components/PrimaryButton';
+import { fetchUserReports } from '../utils/firebaseUtils';
 
 export default function MyReportsScreen({ navigation }) {
-  const { entries } = useAnalysis();
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    const loadReports = async () => {
+      try {
+        const reports = await fetchUserReports();
+        setEntries(reports);
+      } catch (err) {
+        console.error("Error fetching reports:", err);
+      }
+    };
+    loadReports();
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -28,7 +40,7 @@ export default function MyReportsScreen({ navigation }) {
     >
       {item.image && <Image source={{ uri: item.image }} style={styles.image} />}
       <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.type}>{item.type.toUpperCase()}</Text>
+      <Text style={styles.type}>{item.type?.toUpperCase()}</Text>
       <Text style={styles.date}>{item.date}</Text>
     </TouchableOpacity>
   );
@@ -64,11 +76,11 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   header: {
-    fontSize: 24,        // recycling ile eşitlendi
-    fontWeight: '700',    // aynı ağırlık
-    marginBottom: 16,     // aynı alt boşluk
-    color: '#2d2d2d',     // aynı renk
-    textAlign: 'left',    // sola hizalı
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 16,
+    color: '#2d2d2d',
+    textAlign: 'left',
   },
   empty: {
     textAlign: 'center',

@@ -5,7 +5,7 @@ import { calculateDecisionScores } from '../utils/decisionAlgorithm';
 import PrimaryButton from '../components/PrimaryButton';
 import { Feather } from '@expo/vector-icons';
 import { saveAnalysisReport } from '../utils/firebaseUtils';
-import { useAnalysis } from '../context/AnalysisContext'; // 💥 EKLENDİ
+import { useAnalysis } from '../context/AnalysisContext';
 
 export default function AnalysisScreen({ route, navigation }) {
   const {
@@ -20,7 +20,7 @@ export default function AnalysisScreen({ route, navigation }) {
   } = route.params;
 
   const [result, setResult] = useState(null);
-  const { addEntry } = useAnalysis(); // 💥 CONTEXT'TEN ALINDI
+  const { addEntry } = useAnalysis();
 
   useEffect(() => {
     const scores = calculateDecisionScores({
@@ -45,16 +45,14 @@ export default function AnalysisScreen({ route, navigation }) {
       type: scores.recommendation
     };
 
-    // 1. Firebase'e kayıt
+    // 1. Firebase'e kaydet
     saveAnalysisReport(entryData).catch((err) =>
       console.error("Firebase save error:", err)
     );
 
-    // 2. Dashboard için context'e ekle
+    // 2. Context'e de ekle (MyReportsScreen için değil ama görsel akışta gerekirse)
     addEntry({
-      title,
-      type: scores.recommendation,
-      image,
+      ...entryData,
       date: new Date().toLocaleDateString()
     });
   }, []);
@@ -67,9 +65,7 @@ export default function AnalysisScreen({ route, navigation }) {
         image,
         category
       });
-  
     } else {
-      // Diğer iki seçenek için AnalysisDetail ekranına git
       navigation.navigate('AnalysisDetail', {
         type,
         title,
@@ -79,7 +75,7 @@ export default function AnalysisScreen({ route, navigation }) {
       });
     }
   };
-  
+
   if (!result) {
     return (
       <SafeAreaView style={styles.container}>
@@ -117,7 +113,6 @@ export default function AnalysisScreen({ route, navigation }) {
 
       <Image source={{ uri: image }} style={styles.image} />
       <Text style={styles.product}>{title}</Text>
-
     </SafeAreaView>
   );
 }
@@ -176,6 +171,5 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginVertical: 16,
     resizeMode: 'cover'
-  },
-  
+  }
 });
