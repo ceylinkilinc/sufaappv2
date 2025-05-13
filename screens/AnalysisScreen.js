@@ -57,22 +57,27 @@ export default function AnalysisScreen({ route, navigation }) {
       image,
       date: new Date().toLocaleDateString()
     });
-
   }, []);
 
   const handleImpactPress = (type) => {
-    navigation.navigate('AnalysisDetail', {
-      type,
-      title,
-      image,
-      date: new Date().toLocaleDateString(),
-      fromAnalysis: true,
-      category 
-    });
+    if (type === 'upcycle') {
+      // Upcycle için doğrudan UpcyclingIdeas ekranına git, fromAnalysis flag'iyle
+      navigation.navigate('UpcyclingIdeas', {
+        category,
+        fromAnalysis: true
+      });
+    } else {
+      // Diğer iki seçenek için AnalysisDetail ekranına git
+      navigation.navigate('AnalysisDetail', {
+        type,
+        title,
+        image,
+        date: new Date().toLocaleDateString(),
+        fromAnalysis: true
+      });
+    }
   };
   
-  
-
   if (!result) {
     return (
       <SafeAreaView style={styles.container}>

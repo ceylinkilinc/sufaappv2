@@ -30,6 +30,10 @@ import AnalysisDetailScreen from './screens/AnalysisDetailScreen';
 import ImpactScreen from './screens/ImpactScreen';
 import MyReportsScreen from './screens/MyReportsScreen';
 
+// Yeni eklenen ekranlar
+import UpcycleMenuScreen from './screens/UpcycleMenuScreen';
+import UpcycleLocationsScreen from './screens/UpcycleLocationsScreen';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -59,6 +63,9 @@ export default function App() {
             <Stack.Screen name="RecyclingCenters" component={RecyclingCentersScreen} />
             <Stack.Screen name="DonationCenters" component={DonationCentersScreen} />
             <Stack.Screen name="UpcyclingIdeas" component={UpcyclingIdeasScreen} />
+            {/* Upcycle menü ve lokasyon ekranları */}
+            <Stack.Screen name="UpcycleMenu" component={UpcycleMenuScreen} />
+            <Stack.Screen name="UpcycleLocations" component={UpcycleLocationsScreen} />
             <Stack.Screen name="RecycleImpact" component={RecycleImpactScreen} />
             <Stack.Screen name="DonationImpact" component={DonationImpactScreen} />
             <Stack.Screen name="UpcycleImpact" component={UpcycleImpactScreen} />

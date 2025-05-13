@@ -1,20 +1,53 @@
-// screens/DashboardScreen.js
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import DashboardTip from '../components/DashboardTip';  // ← EKLENDİ
+import DashboardTip from '../components/DashboardTip';
+import { auth } from '../firebase'; // ← added
 
 export default function DashboardScreen({ navigation }) {
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Welcome' }],
+      });
+    } catch (err) {
+      console.error('Logout error:', err);
+      Alert.alert('Error', 'Could not log out. Please try again.');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <Image source={require('../assets/logo.png')} style={styles.logo} />
-          <TouchableOpacity onPress={() => navigation.navigate('AccountInfo')}>
-            <Feather name="user" size={24} color="#3c4a2a" />
-          </TouchableOpacity>
+
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => navigation.navigate('AccountInfo')}
+            >
+              <Feather name="user" size={24} color="#3c4a2a" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={handleLogout}
+            >
+              <Feather name="log-out" size={24} color="#3c4a2a" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <Text style={styles.welcome}>Welcome to SuFa</Text>
@@ -65,13 +98,14 @@ export default function DashboardScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
+          {/* Burada UpcyclingIdeas yerine UpcycleMenu’e yönlendiriyoruz */}
           <TouchableOpacity
             style={styles.card}
-            onPress={() => navigation.navigate('UpcyclingIdeas')}
+            onPress={() => navigation.navigate('UpcycleMenu')}
           >
             <Feather name="zap" size={22} color="#3c4a2a" style={styles.icon} />
             <Text style={styles.cardText}>
-              Upcycle{'\n'}Ideas
+              Upcycle{'\n'}Options
             </Text>
           </TouchableOpacity>
         </View>
@@ -100,6 +134,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     resizeMode: 'contain',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    marginLeft: 16,
   },
   welcome: {
     fontSize: 16,

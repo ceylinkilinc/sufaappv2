@@ -28,7 +28,7 @@ const ideasByCategory = {
 };
 
 export default function UpcyclingIdeasScreen({ route, navigation }) {
-  const category = route?.params?.category;
+  const { category, fromAnalysis } = route.params || {};
   const isFiltered = !!category;
 
   let ideas = [];
@@ -86,9 +86,20 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
         />
       )}
 
+      {/* only show “Back” when not coming via fromAnalysis */}
+      {!fromAnalysis && (
+        <PrimaryButton
+          title="Back"
+          onPress={() => navigation.navigate('UpcycleMenu')}
+          style={{ marginTop: 0 }}
+        />
+      )}
+
+      {/* always show “Back to Dashboard” */}
       <PrimaryButton
         title="Back to Dashboard"
         onPress={() => navigation.navigate('Dashboard')}
+        style={{ marginTop: 12 }}
       />
     </SafeAreaView>
   );
@@ -97,11 +108,11 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24 },
   title: {
-    fontSize: 24,        // RecyclingLocations ile aynı boy
-    fontWeight: '700',    // aynı ağırlık
-    marginBottom: 16,     // aynı alt boşluk
-    color: '#2d2d2d',     // aynı renk
-    textAlign: 'left',    // sola hizalı
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 16,
+    color: '#2d2d2d',
+    textAlign: 'left',
   },
   ideaCard: {
     backgroundColor: '#ffffff',
