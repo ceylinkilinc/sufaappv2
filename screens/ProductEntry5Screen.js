@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Text,
   TextInput,
-  TouchableOpacity,
   Image,
   Alert,
   StyleSheet
@@ -77,11 +76,12 @@ export default function ProductEntry5Screen({ route, navigation }) {
         onChangeText={setTitle}
       />
 
-      <TouchableOpacity style={styles.imageButton} onPress={handleAddImage}>
-        <Text style={styles.imageButtonText}>
-          {imageUri ? 'Change Image' : 'Add Image'}
-        </Text>
-      </TouchableOpacity>
+      {/* <-- BURASI DEĞİŞTİ --> */}
+      <PrimaryButton
+        title={imageUri ? 'Change Image' : 'Add Image'}
+        onPress={handleAddImage}
+        style={{ marginBottom: 12 }}
+      />
 
       {imageUri && (
         <Image source={{ uri: imageUri }} style={styles.previewImage} />
@@ -114,18 +114,6 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 16,
     marginBottom: 24,
-  },
-  imageButton: {
-    backgroundColor: '#b6e158',
-    paddingVertical: 16,
-    borderRadius: 20,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  imageButtonText: {
-    color: '#3c4a2a',
-    fontSize: 16,
-    fontWeight: '700',
   },
   previewImage: {
     width: '100%',

@@ -12,19 +12,9 @@ import {
 import PrimaryButton from '../components/PrimaryButton';
 import { db } from '../firebase';
 
-export default function UpcycleLocationsScreen({ navigation, route }) {
+export default function UpcycleLocationsScreen({ navigation }) {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const title = route?.params?.title || 'Unnamed Product';
-  const fromRecommendation = route?.params?.fromRecommendation;
-
-  const handleDone = () => {
-    if (fromRecommendation) {
-      navigation.navigate('Impact', { type: 'upcycle', title });
-    } else {
-      navigation.navigate('Dashboard');
-    }
-  };
 
   const openInMaps = (lat, lng, label) => {
     const url = Platform.select({
@@ -38,7 +28,7 @@ export default function UpcycleLocationsScreen({ navigation, route }) {
     (async () => {
       try {
         const snap = await db.collection('upcycle_locations').get();
-        setLocations(snap.docs.map(d => d.data()));
+        setLocations(snap.docs.map((d) => d.data()));
       } catch (err) {
         console.error('Upcycle locations fetch error:', err);
       } finally {
@@ -60,7 +50,9 @@ export default function UpcycleLocationsScreen({ navigation, route }) {
               <Text style={styles.name}>{loc.address}</Text>
               <PrimaryButton
                 title="Open in Maps"
-                onPress={() => openInMaps(loc.latitude, loc.longitude, loc.address)}
+                onPress={() =>
+                  openInMaps(loc.latitude, loc.longitude, loc.address)
+                }
                 style={styles.mapButton}
                 textStyle={styles.mapButtonText}
               />
@@ -69,17 +61,17 @@ export default function UpcycleLocationsScreen({ navigation, route }) {
         )}
       </ScrollView>
 
-      {/* ↑ Upcycle menüsüne dön */}
+      {/* 🔙 ImpactScreen’e geri dön */}
       <PrimaryButton
         title="Back"
-        onPress={() => navigation.navigate('UpcycleMenu')}
+        onPress={() => navigation.goBack()}
         style={{ marginTop: 0 }}
       />
 
-      {/* ↓ Dashboard’a dön */}
+      {/* 🏠 Dashboard’a dön */}
       <PrimaryButton
         title="Back to Dashboard"
-        onPress={handleDone}
+        onPress={() => navigation.navigate('Dashboard')}
         style={{ marginTop: 12 }}
       />
     </SafeAreaView>
@@ -90,10 +82,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8ffe6',
-    padding: 24,                // container padding ekledik
+    padding: 24,
   },
   scroll: {
-    paddingBottom: 24          // alt boşluk, butonlar dışında
+    paddingBottom: 24,
   },
   title: {
     fontSize: 24,
@@ -120,7 +112,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 25,
     alignSelf: 'flex-start',
-    marginTop: 0,               // ideas ekranındaki gibi
+    marginTop: 0,
   },
   mapButtonText: {
     color: '#fff',

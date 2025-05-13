@@ -59,7 +59,12 @@ export default function ProductEntry4_3Screen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8ffe6', padding: 24, justifyContent: 'center' },
+  container: {
+    flex: 1,
+    backgroundColor: '#f8ffe6',
+    padding: 24,
+    justifyContent: 'center'
+  },
   title: {
     fontSize: 22,
     fontWeight: '700',
@@ -82,7 +87,8 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#3c4a2a'
+    color: '#3c4a2a',
+    textAlign: 'center'  // <-- Bu satır eklendi
   },
   selectedText: {
     color: '#3c4a2a'

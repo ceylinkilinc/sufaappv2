@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
-import { AnalysisContext } from '../context/AnalysisContext';
+import { useAnalysis } from '../context/AnalysisContext';
 
 export default function ImpactScreen({ route, navigation }) {
-  const { type, title, image } = route.params || {};
-  const { addEntry } = useContext(AnalysisContext);
+  const { type, title, image, category } = route.params || {};
+  const { addEntry } = useAnalysis();
 
   const headings = {
     recycle: 'Thanks for Recycling!',
@@ -38,21 +38,34 @@ export default function ImpactScreen({ route, navigation }) {
       type,
       title: title || 'Untitled',
       date: new Date().toLocaleString(),
-      image: image || null, // 💥 Görseli kaydeden yer burası
+      image: image || null,
     };
 
     addEntry(newEntry);
     navigation.navigate('Dashboard');
   };
 
-  const impactItems = impacts[type] || [];
+  const handleViewIdeas = () => {
+    navigation.navigate('UpcyclingIdeas', {
+      title,
+      category,
+      fromAnalysis: true
+    });
+  };
+
+  const handleViewLocations = () => {
+    navigation.navigate('UpcycleLocations', {
+      title,
+      fromRecommendation: true,
+    });
+  };
+
   const heading = headings[type] || 'Impact Summary';
+  const impactItems = impacts[type] || [];
 
   return (
     <SafeAreaView style={styles.container}>
-      {image && (
-        <Image source={{ uri: image }} style={styles.image} />
-      )}
+      {image && <Image source={{ uri: image }} style={styles.image} />}
 
       <Text style={styles.title}>{heading}</Text>
       <Text style={styles.subtitle}>{title}</Text>
@@ -65,6 +78,18 @@ export default function ImpactScreen({ route, navigation }) {
           </View>
         ))}
       </View>
+
+      {type === 'upcycle' && (
+        <>
+          <PrimaryButton title="View Upcycle Ideas" onPress={handleViewIdeas} />
+          <PrimaryButton title="View Upcycle Locations" onPress={handleViewLocations} />
+          <PrimaryButton
+            title="Back to Analyses"
+            onPress={() => navigation.goBack()}
+            style={{ marginTop: 24 }}
+          />
+        </>
+      )}
 
       <PrimaryButton title="Done" onPress={handleDone} style={{ marginTop: 32 }} />
     </SafeAreaView>

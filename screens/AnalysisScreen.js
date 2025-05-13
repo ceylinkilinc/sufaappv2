@@ -61,11 +61,13 @@ export default function AnalysisScreen({ route, navigation }) {
 
   const handleImpactPress = (type) => {
     if (type === 'upcycle') {
-      // Upcycle için doğrudan UpcyclingIdeas ekranına git, fromAnalysis flag'iyle
-      navigation.navigate('UpcyclingIdeas', {
-        category,
-        fromAnalysis: true
+      navigation.navigate('Impact', {
+        type: 'upcycle',
+        title,
+        image,
+        category
       });
+  
     } else {
       // Diğer iki seçenek için AnalysisDetail ekranına git
       navigation.navigate('AnalysisDetail', {
