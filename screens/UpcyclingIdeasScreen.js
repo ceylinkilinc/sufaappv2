@@ -90,7 +90,7 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
       {!fromAnalysis && (
         <PrimaryButton
           title="Back"
-          onPress={() => navigation.navigate('UpcycleMenu')}
+          onPress={() => navigation.goBack()}
           style={{ marginTop: 0 }}
         />
       )}

@@ -1,6 +1,14 @@
 // screens/LoginScreen.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Animated
+} from 'react-native';
 import { auth } from '../firebase'; // compat sürüm auth
 
 const handleSignIn = (email, password) =>
@@ -10,24 +18,46 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Animasyon değerleri
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 5,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
   const handleLogin = () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-
     handleSignIn(email, password)
-      .then(() => {
-        navigation.navigate('Dashboard');
-      })
-      .catch((error) => {
-        Alert.alert('Login Failed', error.message);
-      });
+      .then(() => navigation.navigate('Dashboard'))
+      .catch(err => Alert.alert('Login Failed', err.message));
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
+      <Animated.View
+        style={[
+          styles.box,
+          {
+            opacity: fadeAnim,
+            transform: [{ scale: scaleAnim }]
+          }
+        ]}
+      >
         <Text style={styles.title}>Login</Text>
 
         <TextInput
@@ -48,14 +78,17 @@ export default function LoginScreen({ navigation }) {
           placeholderTextColor="#aaa"
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity
+          style={[styles.button, styles.shadow]}
+          onPress={handleLogin}
+        >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}>
           <Text style={styles.link}>Create an account</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -64,11 +97,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8ffe6',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 24,
   },
   box: {
-    marginTop: -60,
+    marginTop: 220,  // başlıkları sabitlediğimiz yükseklik
   },
   title: {
     fontSize: 28,
@@ -104,5 +137,13 @@ const styles = StyleSheet.create({
     color: '#3c4a2a',
     fontSize: 14,
     textDecorationLine: 'underline',
+  },
+  // WelcomeScreen'deki gölge efekti
+  shadow: {
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 4,
   },
 });

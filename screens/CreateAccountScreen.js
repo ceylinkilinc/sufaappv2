@@ -1,19 +1,39 @@
 // screens/CreateAccountScreen.js
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert
+  Alert,
+  Animated
 } from 'react-native';
-import { auth } from '../firebase'; // compat yapıdan auth
+import { auth } from '../firebase'; // compat yapı auth
 
 export default function CreateAccountScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  // Animasyon değerleri
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 5,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
   const handleCreateAccount = () => {
     if (!email || !password || !confirmPassword) {
@@ -24,21 +44,26 @@ export default function CreateAccountScreen({ navigation }) {
       Alert.alert('Error', 'Passwords do not match');
       return;
     }
-
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         Alert.alert('Success', 'Account created successfully');
         navigation.navigate('Login');
       })
-      .catch((error) => {
-        Alert.alert('Error', error.message);
-      });
+      .catch(err => Alert.alert('Error', err.message));
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
+      <Animated.View
+        style={[
+          styles.box,
+          {
+            opacity: fadeAnim,
+            transform: [{ scale: scaleAnim }]
+          }
+        ]}
+      >
         <Text style={styles.title}>Create Account</Text>
 
         <TextInput
@@ -50,7 +75,6 @@ export default function CreateAccountScreen({ navigation }) {
           value={email}
           onChangeText={setEmail}
         />
-
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -59,7 +83,6 @@ export default function CreateAccountScreen({ navigation }) {
           value={password}
           onChangeText={setPassword}
         />
-
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
@@ -69,14 +92,17 @@ export default function CreateAccountScreen({ navigation }) {
           onChangeText={setConfirmPassword}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
+        <TouchableOpacity
+          style={[styles.button, styles.shadow]}
+          onPress={handleCreateAccount}
+        >
           <Text style={styles.buttonText}>Create</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.link}>Back to Login</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -85,11 +111,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8ffe6',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 24,
   },
   box: {
-    marginTop: -60,
+    marginTop: 220,  // başlıkları sabitlediğimiz yükseklik
   },
   title: {
     fontSize: 28,
@@ -125,5 +151,12 @@ const styles = StyleSheet.create({
     color: '#3c4a2a',
     fontSize: 14,
     textDecorationLine: 'underline',
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 4,
   },
 });

@@ -62,7 +62,7 @@ export default function MyReportsScreen({ navigation }) {
 
       <PrimaryButton
         title="Back to Dashboard"
-        onPress={() => navigation.navigate('Dashboard')}
+        onPress={() => navigation.goBack()}
         style={{ marginTop: 12 }}
       />
     </SafeAreaView>

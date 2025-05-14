@@ -41,7 +41,7 @@ export default function UpcycleMenuScreen({ navigation, route }) {
         {/* ↓ Dashboard’a dön */}
         <PrimaryButton
           title="Back to Dashboard"
-          onPress={() => navigation.navigate('Dashboard')}
+          onPress={() => navigation.goBack()}
           style={{ marginTop: 12 }}
         />
       </View>

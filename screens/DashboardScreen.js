@@ -50,7 +50,7 @@ export default function DashboardScreen({ navigation }) {
           </View>
         </View>
 
-        <Text style={styles.welcome}>Welcome to SuFa</Text>
+        <Text style={styles.welcome}>Welcome to Sufa</Text>
         <Text style={styles.subtitle}>Dashboard</Text>
 
         {/* 🌱 Günlük sürdürülebilirlik ipucu */}
