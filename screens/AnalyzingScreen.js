@@ -7,7 +7,7 @@ export default function AnalyzingScreen({ navigation, route }) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigation.replace('Recommendation', { suggestion });
-    }, 3000); // 3 saniye sonra yönlendir
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, []);

@@ -18,7 +18,7 @@ export const AnalysisProvider = ({ children }) => {
     ]);
   };
 
-  // 🔥 GİRİŞ YAPAN KULLANICININ RAPORLARINI FIRESTORE'DAN ÇEK
+  
   const fetchEntries = async () => {
     const user = auth.currentUser;
     if (!user) return;

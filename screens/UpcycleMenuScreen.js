@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import PrimaryButton from '../components/PrimaryButton';  // ← BUNU EKLEDİK
+import PrimaryButton from '../components/PrimaryButton'; 
 
 export default function UpcycleMenuScreen({ navigation, route }) {
   const category = route?.params?.category;
@@ -35,7 +35,7 @@ export default function UpcycleMenuScreen({ navigation, route }) {
           </Text>
         </TouchableOpacity>
 
-        {/* Spacer: butonları aşağı itmek için */}
+       
         <View style={{ flex: 1 }} />
 
         {/* ↓ Dashboard’a dön */}

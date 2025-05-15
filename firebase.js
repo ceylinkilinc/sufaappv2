@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import 'firebase/compat/storage'; // ✅ BU SATIRI EKLEDİK
+import 'firebase/compat/storage'; // 
 
 const firebaseConfig = {
   apiKey: "AIzaSyDBsBnEoThhcuqA5vcSjT_PgGwcByILyDw",
@@ -18,5 +18,5 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
-export const storage = firebase.storage(); // ✅ STORAGE EXPORT
+export const storage = firebase.storage(); 
 export default firebase;

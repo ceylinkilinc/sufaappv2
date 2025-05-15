@@ -1,4 +1,3 @@
-// screens/LoginScreen.js
 import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
@@ -9,7 +8,7 @@ import {
   Alert,
   Animated
 } from 'react-native';
-import { auth } from '../firebase'; // compat sürüm auth
+import { auth } from '../firebase'; 
 
 const handleSignIn = (email, password) =>
   auth.signInWithEmailAndPassword(email, password);
@@ -18,7 +17,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Animasyon değerleri
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   box: {
-    marginTop: 220,  // başlıkları sabitlediğimiz yükseklik
+    marginTop: 220,  
   },
   title: {
     fontSize: 28,
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: 'underline',
   },
-  // WelcomeScreen'deki gölge efekti
+  
   shadow: {
     shadowColor: '#000',
     shadowOpacity: 0.1,

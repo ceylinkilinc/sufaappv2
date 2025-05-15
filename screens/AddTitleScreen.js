@@ -7,7 +7,7 @@ export default function AddTitleScreen({ navigation }) {
   const [imageUri, setImageUri] = useState(null);
 
   const pickImage = async () => {
-    // Kamera erişim izni iste
+   
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permission required', 'Camera permission is needed to take a photo.');
@@ -30,9 +30,9 @@ export default function AddTitleScreen({ navigation }) {
       return;
     }
 
-    // şimdilik sabit olarak öneri gönderiyoruz (backend yok)
+   
     navigation.navigate('Analyzing', {
-      suggestion: 'recycle', // Sabit değer gönderiyoruz
+      suggestion: 'recycle', 
     });
   };
 

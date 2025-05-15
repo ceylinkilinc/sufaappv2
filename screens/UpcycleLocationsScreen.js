@@ -61,14 +61,14 @@ export default function UpcycleLocationsScreen({ navigation }) {
         )}
       </ScrollView>
 
-      {/* 🔙 ImpactScreen’e geri dön */}
+      {/*  ImpactScreen’e geri dön */}
       <PrimaryButton
         title="Back"
         onPress={() => navigation.goBack()}
         style={{ marginTop: 0 }}
       />
 
-      {/* 🏠 Dashboard’a dön */}
+      {/*  Dashboard’a dön */}
       <PrimaryButton
         title="Back to Dashboard"
         onPress={() => navigation.navigate('Dashboard')}

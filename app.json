@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SufaApp",
-    "slug": "SufaApp",
+    "name": "Sufa-App",
+    "slug": "Sufa-App",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

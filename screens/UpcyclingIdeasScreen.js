@@ -86,7 +86,7 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
         />
       )}
 
-      {/* only show “Back” when not coming via fromAnalysis */}
+      
       {!fromAnalysis && (
         <PrimaryButton
           title="Back"
@@ -102,7 +102,7 @@ export default function UpcyclingIdeasScreen({ route, navigation }) {
         />
       )}
 
-      {/* always show “Back to Dashboard” */}
+      
       <PrimaryButton
         title="Back to Dashboard"
         onPress={() => navigation.navigate('Dashboard')}

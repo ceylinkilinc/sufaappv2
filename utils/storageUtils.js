@@ -1,6 +1,6 @@
 import { auth, storage } from '../firebase';
 
-// 📦 Görseli Firebase Storage'a yükleyip download URL döndürür
+
 export const saveImageToStorage = async (imageUri) => {
   if (!imageUri) return null;
 

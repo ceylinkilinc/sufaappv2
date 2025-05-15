@@ -11,7 +11,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import { fetchDonationLocations } from '../utils/firebaseUtils';  // yeni import
+import { fetchDonationLocations } from '../utils/firebaseUtils';  
 
 export default function DonationCentersScreen({ navigation, route }) {
   const [locations, setLocations] = useState([]);
@@ -20,7 +20,6 @@ export default function DonationCentersScreen({ navigation, route }) {
   const title = route?.params?.title || 'Unnamed Product';
   const fromRecommendation = route?.params?.fromRecommendation;
 
-  // Maps açma fonksiyonu (iOS: Apple Maps, Android: geo URI)
   const openInMaps = (lat, lng, label) => {
     const url =
       Platform.OS === 'ios'

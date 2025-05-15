@@ -1,11 +1,10 @@
-// screens/WelcomeScreen.js
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function WelcomeScreen({ navigation }) {
-  // Animasyon için bir Animated.Value oluşturalım
+ 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 

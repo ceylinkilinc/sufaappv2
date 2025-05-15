@@ -5,7 +5,7 @@ import { calculateDecisionScores } from '../utils/decisionAlgorithm';
 import PrimaryButton from '../components/PrimaryButton';
 import { Feather } from '@expo/vector-icons';
 import { saveAnalysisReport } from '../utils/firebaseUtils';
-import { saveImageToStorage } from '../utils/storageUtils'; // ✅ GÖRSEL YÜKLEME EKLENDİ
+import { saveImageToStorage } from '../utils/storageUtils'; 
 import { useAnalysis } from '../context/AnalysisContext';
 
 export default function AnalysisScreen({ route, navigation }) {
@@ -21,7 +21,7 @@ export default function AnalysisScreen({ route, navigation }) {
   } = route.params;
 
   const [result, setResult] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(image); // ✅ yüklenen url’i burada tut
+  const [uploadedImage, setUploadedImage] = useState(image); 
   const { addEntry } = useAnalysis();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function AnalysisScreen({ route, navigation }) {
       let imageUrl = image;
       try {
         imageUrl = await saveImageToStorage(image);
-        setUploadedImage(imageUrl); // ✅ Yüklenen URL ile güncelle
+        setUploadedImage(imageUrl); 
       } catch (err) {
         console.warn("Image upload failed, using local URI.");
       }
